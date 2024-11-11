@@ -1,0 +1,43 @@
+//@version=5
+indicator('GAS Price Levels', overlay=true)
+
+// === Input Parameters ===
+emaPeriods = input.int(9, 'EMA Length')
+atrLength = input.int(10, 'ATR Length')
+bbandsLength = input.int(20, 'BB Length')
+bbandsStdDev = input.float(2.0, 'BB StdDev')
+rsiLength = input.int(14, 'RSI Length')
+cciLength = input.int(20, 'CCI Length')
+
+// === Technical Indicators ===
+[bbUpper, bbMiddle, bbLower] = ta.bb(close, bbandsLength, bbandsStdDev)
+rsi = ta.rsi(close, rsiLength)
+cci = ta.cci(close, cciLength)
+atr = ta.atr(atrLength)
+williams_r = ta.wpr(14)
+[macdLine, signalLine, histLine] = ta.macd(close, 12, 26, 9)
+kama_line = ta.ema(close, 10)
+
+// Alpha238 (40-day Minimum LogReturn)
+cumLogReturn40d = ta.cum(math.log(close / close[1]))
+alpha238 = ta.lowestbars(cumLogReturn40d, 40)
+
+// Alpha51 (Price ROC Based)
+alpha51 = ta.roc(close, 30) * ta.roc(close, 5)
+
+// Alpha262 (CCI Complex)
+cumLogReturn110d = ta.cum(math.log(close / close[1]))
+alpha262 = ta.change(ta.sma(math.pow(cci, 2), cciLength)) 
+
+// === Dynamic Weight Calculation ===
+float ic_238 = ta.correlation(alpha238, ta.change(close), 20)
+float ic_51 = ta.correlation(alpha51, ta.change(close), 20)
+float ic_262 = ta.correlation(alpha262, ta.change(close), 20)
+float total_ic = math.abs(ic_238) + math.abs(ic_51) + math.abs(ic_262)
+float w238 = math.abs(ic_238) / total_ic
+
+// Plot price levels
+plot(bbUpper, 'BB Upper', color=color.new(color.blue, 80))
+plot(bbMiddle, 'BB Middle', color=color.new(color.white, 80))
+plot(bbLower, 'BB Lower', color=color.new(color.blue, 80))
+plot(kama_line, 'KAMA', color=color.new(color.orange, 80))
