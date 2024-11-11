@@ -117,7 +117,3 @@ MIT License
 
 ## Author
 Denizhan Dakılır
-
-## Version History
-- v1.0.0: Initial release
-- [Additional versions as needed]
