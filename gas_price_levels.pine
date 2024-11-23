@@ -1,5 +1,5 @@
-//@version=5
-indicator('GAS Price Levels', overlay=true)
+//@version=6
+indicator('GAS Price Levels', overlay = true)
 
 // === Input Parameters ===
 emaPeriods = input.int(9, 'EMA Length')
@@ -27,7 +27,7 @@ alpha51 = ta.roc(close, 30) * ta.roc(close, 5)
 
 // Alpha262 (CCI Complex)
 cumLogReturn110d = ta.cum(math.log(close / close[1]))
-alpha262 = ta.change(ta.sma(math.pow(cci, 2), cciLength)) 
+alpha262 = ta.change(ta.sma(math.pow(cci, 2), cciLength))
 
 // === Dynamic Weight Calculation ===
 float ic_238 = ta.correlation(alpha238, ta.change(close), 20)
@@ -37,7 +37,7 @@ float total_ic = math.abs(ic_238) + math.abs(ic_51) + math.abs(ic_262)
 float w238 = math.abs(ic_238) / total_ic
 
 // Plot price levels
-plot(bbUpper, 'BB Upper', color=color.new(color.blue, 80))
-plot(bbMiddle, 'BB Middle', color=color.new(color.white, 80))
-plot(bbLower, 'BB Lower', color=color.new(color.blue, 80))
-plot(kama_line, 'KAMA', color=color.new(color.orange, 80))
+plot(bbUpper, 'BB Upper', color = color.new(color.blue, 80))
+plot(bbMiddle, 'BB Middle', color = color.new(color.white, 80))
+plot(bbLower, 'BB Lower', color = color.new(color.blue, 80))
+plot(kama_line, 'KAMA', color = color.new(color.orange, 80))
