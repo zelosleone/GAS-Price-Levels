@@ -1,7 +1,15 @@
 # GAS Price Levels Technical Indicator
 
 ## Overview
-The GAS Price Levels indicator is a sophisticated multi-factor technical analysis tool that combines traditional technical indicators with advanced alpha factors to provide comprehensive price level analysis for natural gas trading. This indicator implements a dynamic weighting system based on Information Coefficients (IC) to adapt to changing market conditions.
+The GAS Price Levels Technical Indicator is a **sophisticated multi-factor technical analysis tool** designed for **natural gas trading**. It combines traditional technical indicators with advanced alpha factors, utilizing a **dynamic weighting system** based on **Information Coefficients (IC)** to adapt to **volatile market conditions**. This indicator provides comprehensive **price level analysis**, enabling traders to identify **support and resistance zones** with high precision.
+
+## Features
+
+- **Advanced Technical Indicators**: Integrates Bollinger Bands, KAMA, RSI, CCI, ATR, Williams %R, and MACD for robust price analysis.
+- **Dynamic Weighting System**: Automatically adjusts indicator weights based on recent **predictive power** using Information Coefficients.
+- **Mathematical Foundations**: Employs **cumulative log returns**, **rate of change (ROC)**, and **correlation calculations** to enhance analysis accuracy.
+- **Performance Optimized**: Utilizes efficient `ta.*` functions to ensure minimal computational overhead and prevent repainting.
+- **Risk Management Tools**: Incorporates multiple timeframe analysis and volatility-based risk adjustments for effective position sizing.
 
 ## Technical Components
 
@@ -10,12 +18,12 @@ The GAS Price Levels indicator is a sophisticated multi-factor technical analysi
    - Length: 20 periods (customizable)
    - Standard Deviation: 2.0 (customizable)
    - Implementation: `ta.bb(close, bbandsLength, bbandsStdDev)`
-   - Provides dynamic support/resistance levels based on volatility
+   - Provides dynamic support/resistance levels based on **volatility**
 
 2. **Kaufman's Adaptive Moving Average (KAMA)**
    - Length: 10 periods
    - Implementation: `ta.ema(close, 10)`
-   - Adapts to market volatility for more responsive trend following
+   - Adapts to market volatility for more responsive **trend following**
 
 3. **Additional Supporting Indicators**
    - RSI (Relative Strength Index): 14-period default
@@ -32,31 +40,31 @@ cumLogReturn40d = ta.cum(math.log(close / close[1]))
 alpha238 = ta.lowestbars(cumLogReturn40d, 40)
 ```
 Mathematical foundation:
-- Calculates cumulative log returns over 40 days
-- Identifies historical price patterns through minimum return periods
-- Effective for mean reversion strategies
+- Calculates **cumulative log returns** over 40 days
+- Identifies historical price patterns through **minimum return periods**
+- Effective for **mean reversion strategies**
 
 #### Alpha51 (Price ROC Interaction)
 ```pine
 alpha51 = ta.roc(close, 30) * ta.roc(close, 5)
 ```
 Properties:
-- Combines long-term (30-period) and short-term (5-period) price momentum
-- Identifies momentum divergences and convergences
-- Multiplication effect amplifies significant price moves
+- Combines **long-term (30-period)** and **short-term (5-period)** price momentum
+- Identifies **momentum divergences** and **convergences**
+- Multiplication effect amplifies significant **price moves**
 
 #### Alpha262 (CCI Complex)
 ```pine
 alpha262 = ta.change(ta.sma(math.pow(cci, 2), cciLength))
 ```
 Characteristics:
-- Squares CCI values to emphasize extreme movements
-- Applies smoothing through SMA
-- Tracks rate of change in volatility
+- Squares CCI values to emphasize **extreme movements**
+- Applies **smoothing** through SMA
+- Tracks **rate of change** in volatility
 
 ### Dynamic Weighting System
 
-The indicator implements a sophisticated dynamic weighting system based on Information Coefficients (IC):
+The indicator implements a sophisticated **dynamic weighting system** based on **Information Coefficients (IC)**:
 
 ```pine
 float ic_238 = ta.correlation(alpha238, ta.change(close), 20)
@@ -67,42 +75,42 @@ float w238 = math.abs(ic_238) / total_ic
 ```
 
 #### Weight Calculation Method
-1. Calculates 20-period correlation between each alpha and price changes
-2. Takes absolute values to focus on strength rather than direction
-3. Normalizes weights by dividing by total IC
-4. Automatically adjusts factor importance based on recent predictive power
+1. Calculates **20-period correlation** between each alpha and **price changes**
+2. Takes **absolute values** to focus on **strength** rather than direction
+3. **Normalizes weights** by dividing by **total IC**
+4. Automatically adjusts **factor importance** based on recent **predictive power**
 
 ## Usage Parameters
 
-| Parameter | Default | Description |
-|-----------|---------|-------------|
-| emaPeriods | 9 | EMA calculation length |
-| atrLength | 10 | ATR calculation period |
-| bbandsLength | 20 | Bollinger Bands period |
-| bbandsStdDev | 2.0 | BB standard deviation multiplier |
-| rsiLength | 14 | RSI calculation period |
-| cciLength | 20 | CCI calculation period |
+| Parameter     | Default | Description                          |
+|---------------|---------|--------------------------------------|
+| emaPeriods    | 9       | EMA calculation length               |
+| atrLength     | 10      | ATR calculation period               |
+| bbandsLength  | 20      | Bollinger Bands period               |
+| bbandsStdDev  | 2.0     | BB standard deviation multiplier     |
+| rsiLength     | 14      | RSI calculation period               |
+| cciLength     | 20      | CCI calculation period               |
 
 ## Visual Components
 
-The indicator displays several overlay elements on the price chart:
-- Bollinger Bands (Upper, Middle, Lower) in blue/white with 80% transparency
-- KAMA line in orange with 80% transparency
+The indicator displays several **overlay elements** on the price chart:
+- **Bollinger Bands** (Upper, Middle, Lower) in blue/white with 80% transparency
+- **KAMA line** in orange with 80% transparency
 
 ## Implementation Notes
 
 1. **Performance Considerations**
    - Uses efficient `ta.*` built-in functions for optimal performance
-   - Implements look-back periods carefully to minimize repainting
-   - Calculations are streamlined to reduce computational overhead
+   - Implements look-back periods carefully to minimize **repainting**
+   - Calculations are streamlined to reduce **computational overhead**
 
 2. **Risk Management**
-   - Multiple timeframe analysis recommended (indicator works on any timeframe)
-   - Use in conjunction with position sizing based on ATR values
-   - Consider BB width for volatility-based risk adjustment
+   - Multiple timeframe analysis recommended (**indicator works on any timeframe**)
+   - Use in conjunction with **position sizing** based on ATR values
+   - Consider BB width for **volatility-based risk adjustment**
 
 ## Requirements
-- TradingView Pine Script version 5
+- TradingView Pine Script version 6
 - Real-time or delayed data feed for natural gas prices
 
 ## Installation
